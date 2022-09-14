@@ -10,7 +10,21 @@ const Pagination = ({ userArray, loading }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [searchField, setSearchField] = useState("");
   const [displayModal, setDisplayModal] = useState(false);
-  const [modalInfo, setModalInfo] = useState("");
+  const [modalInfo, setModalInfo] = useState({
+    name: { first: "", last: "" },
+    title: "",
+    gender: "male",
+    picture: {
+      large: "",
+    },
+    dob: { age: 20, date: "" },
+    location: {
+      city: "",
+      country: "",
+      postcode: 57460,
+      state: "",
+    },
+  });
 
   const totalPageCount = Math.ceil(userArray.length / recordsPerPage);
   const pageNumber = [];
@@ -30,7 +44,6 @@ const Pagination = ({ userArray, loading }) => {
 
   const pageSize = (event) => {
     setRecordsPerPage(Number(event.target.value));
-    // setCurrentPageNumber(1);
   };
 
   const navigatePage = () => {
@@ -48,13 +61,20 @@ const Pagination = ({ userArray, loading }) => {
     });
     setSearchResults(newCurrentRecords);
     setCurrentPageNumber(1);
+
+    if (event.target.value === "") {
+      setSearchResults([]);
+      setSearchField("");
+    }
   };
 
-  const selectModal = () => {
-    console.log(currentRecords);
+  const selectModal = (user) => {
     setDisplayModal(displayModal ? false : true);
-    setModalInfo();
+    user && setModalInfo(user);
   };
+  console.log("current record ->", currentRecords);
+  console.log("search record -> ", searchResults);
+  console.log("records->", recordsPerPage);
 
   if (loading) return <div className='center'>Loading...</div>;
   return (
@@ -65,57 +85,71 @@ const Pagination = ({ userArray, loading }) => {
         placeholder='Search User'
         onChange={(event) => onChangeHandler(event)}
       />
-      <table>
-        <tr className='table-row'>
-          <td> </td>
-          <td>Name</td>
-          <td>Age</td>
-          <td>Email</td>
-          <td>Phone</td>
-        </tr>
 
-        {searchResults.length === 0 || searchField === ""
-          ? currentRecords.map((user) => (
-              <tr key={user.id.value}>
-                <td>
-                  <img src={user.picture.thumbnail} alt='Profile' />
-                </td>
-                <td>
-                  {user.name.first} {user.name.last}
-                </td>
-                <td>{user.dob.age} </td>
-                <td> {user.email}</td>
-                <td> {user.phone}</td>
-                <td>
-                  {!displayModal && (
-                    <button
-                      onClick={selectModal}
-                      className='btn btn-outline-info'>
-                      more...
-                    </button>
-                  )}
-                  <Modal
-                    className='modal'
-                    displayModal={displayModal}
-                    modalInfo={modalInfo}
-                    closeModal={selectModal}
-                    user={user}
-                  />
-                </td>
-              </tr>
-            ))
-          : searchResults.map((user) => (
-              <tr>
+      <tr className='table-row'>
+        <td> </td>
+        <td>Name</td>
+        <td>Age</td>
+        <td>Email</td>
+        <td>Phone</td>
+      </tr>
+
+      {searchResults.length === 0 || searchField === ""
+        ? currentRecords.map((user) => (
+            <tr key={user.id.value}>
+              <td>
                 <img src={user.picture.thumbnail} alt='Profile' />
-                <td>
-                  {user.name.first} {user.name.last}
-                </td>
-                <td>{user.dob.age} </td>
-                <td> {user.email}</td>
-                <td> {user.phone}</td>
-              </tr>
-            ))}
-      </table>
+              </td>
+              <td>
+                {user.name.first} {user.name.last}
+              </td>
+              <td>{user.dob.age} </td>
+              <td> {user.email}</td>
+              <td> {user.phone}</td>
+              <td>
+                {!displayModal && (
+                  <button
+                    onClick={() => selectModal(user)}
+                    className='btn btn-outline-info'>
+                    more...
+                  </button>
+                )}
+                <Modal
+                  className='modal'
+                  displayModal={displayModal}
+                  modalInfo={modalInfo}
+                  closeModal={selectModal}
+                />
+              </td>
+            </tr>
+          ))
+        : searchResults.map((user) => (
+            <tr>
+              <img src={user.picture.thumbnail} alt='Profile' />
+              <td>
+                {user.name.first} {user.name.last}
+              </td>
+              <td>{user.dob.age} </td>
+              <td> {user.email}</td>
+              <td> {user.phone}</td>
+              <td>
+                {!displayModal && (
+                  <button
+                    onClick={() => selectModal(user)}
+                    className='btn btn-outline-info'>
+                    more...
+                  </button>
+                )}
+                <Modal
+                  className='modal'
+                  displayModal={displayModal}
+                  modalInfo={modalInfo}
+                  closeModal={selectModal}
+                />
+              </td>
+            </tr>
+          ))}
+
       <nav>
         {navigatePage().map((page, index) => (
           <button
