@@ -7,25 +7,26 @@ const Pagination = ({ userArray, loading }) => {
   const [recordsPerPage, setRecordsPerPage] = useState(5);
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
   const [currentRecords, setCurrentRecords] = useState([]);
-  // const [searchResults, setSearchResults] = useState([]);
-  // const [searchField, setSearchField] = useState("");
-  // const [displayModal, setDisplayModal] = useState(false);
-  // const [modalInfo, setModalInfo] = useState({
-  //   name: { first: "", last: "" },
-  //   title: "",
-  //   gender: "male",
-  //   picture: {
-  //     large: "",
-  //   },
-  //   dob: { age: 20, date: "" },
-  //   location: {
-  //     city: "",
-  //     country: "",
-  //     postcode: 57460,
-  //     state: "",
-  //   },
-  // });
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchField, setSearchField] = useState("");
+  const [displayModal, setDisplayModal] = useState(false);
+  const [modalInfo, setModalInfo] = useState({
+    name: { first: "", last: "" },
+    title: "",
+    gender: "male",
+    picture: {
+      large: "",
+    },
+    dob: { age: 20, date: "" },
+    location: {
+      city: "",
+      country: "",
+      postcode: 57460,
+      state: "",
+    },
+  });
 
+  console.log(userArray);
   const totalPageCount = Math.ceil(userArray.length / recordsPerPage);
   const pageNumber = [];
   for (var i = 1; i <= totalPageCount; i++) {
@@ -36,17 +37,9 @@ const Pagination = ({ userArray, loading }) => {
     const firstRecord = (currentPageNumber - 1) * recordsPerPage;
     const lastRecord =
       (currentPageNumber - 1) * recordsPerPage + (recordsPerPage - 1);
-
     const newRecords = userArray.slice(firstRecord, lastRecord + 1);
-    console.log("newrec", newRecords);
-
     setCurrentRecords(newRecords);
-    console.log("userArray", userArray);
-    console.log("currentPageNumber", currentPageNumber);
-    console.log("recordsPerPage", recordsPerPage);
   }, [userArray, currentPageNumber, recordsPerPage]);
-
-  console.log("curr records", currentRecords);
 
   const pageSize = (event) => {
     setRecordsPerPage(Number(event.target.value));
@@ -56,32 +49,29 @@ const Pagination = ({ userArray, loading }) => {
     return pageNumber.map((page) => page);
   };
 
-  // const onChangeHandler = (event) => {
-  //   setSearchField(event.target.value.toLocaleLowerCase());
+  const onChangeHandler = (event) => {
+    setSearchField(event.target.value.toLocaleLowerCase());
+    console.log(event.target.value.toLocaleLowerCase());
+    const newCurrentRecords = userArray.filter((user) => {
+      return (
+        user.name.first.toLocaleLowerCase().includes(searchField) ||
+        user.name.last.toLocaleLowerCase().includes(searchField)
+      );
+    });
 
-  //   const newCurrentRecords = userArray.filter((user) => {
-  //     return (
-  //       user.name.first.toLocaleLowerCase().includes(searchField) ||
-  //       user.name.last.toLocaleLowerCase().includes(searchField)
-  //     );
-  //   });
+    setSearchResults(newCurrentRecords);
+    setCurrentPageNumber(1);
 
-  //   setSearchResults(newCurrentRecords);
-  //   setCurrentPageNumber(1);
+    if (event.target.value === "") {
+      setSearchResults([]);
+      setSearchField("");
+    }
+  };
 
-  //   if (event.target.value === "") {
-  //     setSearchResults([]);
-  //     setSearchField("");
-  //   }
-  // };
-
-  // const selectModal = (user) => {
-  //   setDisplayModal(displayModal ? false : true);
-  //   user && setModalInfo(user);
-  // };
-  console.log("current record ->", currentRecords);
-  // console.log("search record -> ", searchResults);
-  console.log("records->", recordsPerPage);
+  const selectModal = (user) => {
+    setDisplayModal(displayModal ? false : true);
+    user && setModalInfo(user);
+  };
 
   if (loading) return <div className='center'>Loading...</div>;
   return (
@@ -90,7 +80,7 @@ const Pagination = ({ userArray, loading }) => {
         className='search-box'
         type='search'
         placeholder='Search User'
-        // onChange={(event) => onChangeHandler(event)}
+        onChange={(event) => onChangeHandler(event)}
       />
 
       <tr className='table-row'>
@@ -101,22 +91,9 @@ const Pagination = ({ userArray, loading }) => {
         <td>Phone</td>
       </tr>
 
-      {currentRecords.map((user) => (
-        <tr key={user.id.value}>
-          <td>
-            <img src={user.picture.thumbnail} alt='Profile' />
-          </td>
-          <td>
-            {user.name.first} {user.name.last}
-          </td>
-          <td>{user.dob.age} </td>
-          <td> {user.email}</td>
-          <td> {user.phone}</td>
-        </tr>
-      ))}
-      {/* {searchResults.length === 0 || searchField === ""
-        ? currentRecords.map((user) => (
-            <tr key={user.id.value}>
+      {searchResults.length === 0 || searchField === ""
+        ? currentRecords.map((user, index) => (
+            <tr key={index}>
               <td>
                 <img src={user.picture.thumbnail} alt='Profile' />
               </td>
@@ -143,8 +120,8 @@ const Pagination = ({ userArray, loading }) => {
               </td>
             </tr>
           ))
-        : searchResults.map((user) => (
-            <tr>
+        : searchResults.map((user, index) => (
+            <tr key={index}>
               <img src={user.picture.thumbnail} alt='Profile' />
               <td>
                 {user.name.first} {user.name.last}
@@ -168,7 +145,7 @@ const Pagination = ({ userArray, loading }) => {
                 />
               </td>
             </tr>
-          ))} */}
+          ))}
 
       <nav>
         {pageNumber.map((page, index) => (
