@@ -12,9 +12,9 @@ const Modal = ({ displayModal, closeModal, modalInfo }) => {
   return (
     <div className='modal' onClick={closeModalHere} style={divStyle}>
       <div className='modal-content' onClick={(e) => e.stopPropagation()}>
-        <div className='close' onClick={closeModalHere}>
+        <span className='close' onClick={closeModalHere}>
           &times;
-        </div>
+        </span>
         {
           <div className='modal-info'>
             {

@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "../pagination/pagination.component";
-import Modal from "../modal/modal.component";
-// import "./users.style.css";
+
+import "./users.style.css";
 
 const Users = () => {
   const [userArray, setUserArray] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [displayModal, setDisplayModal] = useState(false);
-  const [modalInfo, setModalInfo] = useState("");
 
   useEffect(() => {
     setLoading(true);
-    fetch(`https://randomuser.me/api?results=43`)
+    fetch(`https://randomuser.me/api?results=33`)
       .then((response) => {
         return response.json();
       })
