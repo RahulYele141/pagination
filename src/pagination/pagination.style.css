@@ -46,3 +46,11 @@ img {
   align-items: stretch;
   justify-content: space-between;
 }
+
+.hide-data {
+  opacity: 0;
+}
+
+.show-data {
+  opacity: 100%;
+}

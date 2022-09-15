@@ -10,6 +10,7 @@ const Pagination = ({ userArray, loading }) => {
   const [currentRecords, setCurrentRecords] = useState([]);
   const [searchField, setSearchField] = useState("");
   const [displayModal, setDisplayModal] = useState(false);
+  const [hidden, setHidden] = useState("hidden");
   const [modalInfo, setModalInfo] = useState({
     name: { first: "first", last: "last" },
     title: "title",
@@ -55,6 +56,14 @@ const Pagination = ({ userArray, loading }) => {
     user && setModalInfo(user);
   };
 
+  const showData = (e, user) => {
+    console.log(e.target.innerText);
+    user.email === e.target.innerText
+      ? setHidden("show-data")
+      : setHidden("hide-data");
+    return user;
+  };
+
   if (loading) return <div className='center'>Loading...</div>;
 
   return (
@@ -84,7 +93,7 @@ const Pagination = ({ userArray, loading }) => {
               );
             })
             .map((user, index) => (
-              <tr key={index}>
+              <tr key={index} onClick={(event) => showData(event, user)}>
                 <td>
                   <img src={user.picture.thumbnail} alt='Profile' />
                 </td>
@@ -109,6 +118,11 @@ const Pagination = ({ userArray, loading }) => {
                     closeModal={selectModal}
                   />
                 </td>
+                {hidden === "show-data" && user.email ? (
+                  <div className='show-data'> Here is my data</div>
+                ) : (
+                  <div className='hide-data'> Here is my data</div>
+                )}
               </tr>
             ))}
         </table>
