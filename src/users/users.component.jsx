@@ -9,7 +9,7 @@ const Users = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`https://randomuser.me/api?results=33`)
+    fetch(`https://randomuser.me/api?results=37`)
       .then((response) => {
         return response.json();
       })

@@ -1,26 +1,19 @@
-div {
-  align-items: center;
-  justify-content: center;
-  margin: 10px 10px 10px 10px;
-  padding: auto;
+.div-root {
+  flex-direction: column;
+  display: block;
+  justify-content: space-between;
+  margin: 0 auto;
+  padding: 10px 0;
+}
+
+.center {
+  align-items: stretch;
+  justify-content: space-around;
   display: flex;
 }
 
-.div-content {
-  align-items: center;
-  justify-content: center;
-  margin: auto;
-  width: 80%;
-  display: block;
-  column-gap: 20px;
-}
-.center {
-  align-items: center;
-  justify-content: space-around;
-}
-
-span {
-  margin: auto;
+.search-box {
+  margin: 10px 0;
 }
 
 .table-row {
@@ -45,14 +38,10 @@ span {
   background: #1e293b;
 }
 
-.modal {
-  background-color: rgba(250, 248, 248, 0.4);
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  overflow: auto;
-  padding-top: 80px;
+img {
+  border-radius: 100%;
+}
+.pagination-row {
+  margin: 20px 0;
+  justify-content: space-between;
 }

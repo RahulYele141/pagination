@@ -1,5 +1,6 @@
 import { React, useEffect, useState } from "react";
 import Modal from "../modal/modal.component";
+import logo from "../assets/logo192.png";
 
 import "./pagination.style.css";
 
@@ -17,7 +18,7 @@ const Pagination = ({ userArray, loading }) => {
     picture: {
       large: "",
     },
-    dob: { age: 20, date: "" },
+    dob: { age: 20, date: "1972-01-12T13:30:12.077Z" },
     location: {
       city: "city",
       country: "country",
@@ -79,80 +80,82 @@ const Pagination = ({ userArray, loading }) => {
   if (loading) return <div className='center'>Loading...</div>;
 
   return (
-    <div className='div-content'>
+    <div className='div-root'>
+      <img style={{ height: 30, width: 30 }} src={logo} alt='logo' />
+      <input
+        className='search-box '
+        type='search'
+        placeholder='Search User'
+        onChange={(event) => onChangeHandler(event)}
+      />
       <div className='center'>
-        <input
-          className='search-box '
-          type='search'
-          placeholder='Search User'
-          onChange={(event) => onChangeHandler(event)}
-        />
+        <table>
+          <tr className='table-row'>
+            <td> </td>
+            <td>Name</td>
+            <td>Age</td>
+            <td>Email</td>
+            <td>Phone</td>
+          </tr>
 
-        <tr className='table-row'>
-          <td> </td>
-          <td>Name</td>
-          <td>Age</td>
-          <td>Email</td>
-          <td>Phone</td>
-        </tr>
-
-        {searchResults.length === 0 || searchField === ""
-          ? currentRecords.map((user, index) => (
-              <tr key={index}>
-                <td>
+          {searchResults.length === 0 || searchField === ""
+            ? currentRecords.map((user, index) => (
+                <tr key={index}>
+                  <td>
+                    <img src={user.picture.thumbnail} alt='Profile' />
+                  </td>
+                  <td>
+                    {user.name.first} {user.name.last}
+                  </td>
+                  <td>{user.dob.age} </td>
+                  <td> {user.email}</td>
+                  <td> {user.phone}</td>
+                  <td>
+                    {!displayModal && (
+                      <button
+                        onClick={() => selectModal(user)}
+                        className='btn btn-outline-info'>
+                        more...
+                      </button>
+                    )}
+                    <Modal
+                      className='modal'
+                      displayModal={displayModal}
+                      modalInfo={modalInfo}
+                      closeModal={selectModal}
+                    />
+                  </td>
+                </tr>
+              ))
+            : searchResults.map((user, index) => (
+                <tr key={index}>
                   <img src={user.picture.thumbnail} alt='Profile' />
-                </td>
-                <td>
-                  {user.name.first} {user.name.last}
-                </td>
-                <td>{user.dob.age} </td>
-                <td> {user.email}</td>
-                <td> {user.phone}</td>
-                <td>
-                  {!displayModal && (
-                    <button
-                      onClick={() => selectModal(user)}
-                      className='btn btn-outline-info'>
-                      more...
-                    </button>
-                  )}
-                  <Modal
-                    className='modal'
-                    displayModal={displayModal}
-                    modalInfo={modalInfo}
-                    closeModal={selectModal}
-                  />
-                </td>
-              </tr>
-            ))
-          : searchResults.map((user, index) => (
-              <tr key={index}>
-                <img src={user.picture.thumbnail} alt='Profile' />
-                <td>
-                  {user.name.first} {user.name.last}
-                </td>
-                <td>{user.dob.age} </td>
-                <td> {user.email}</td>
-                <td> {user.phone}</td>
-                <td>
-                  {!displayModal && (
-                    <button
-                      onClick={() => selectModal(user)}
-                      className='btn btn-outline-info'>
-                      more...
-                    </button>
-                  )}
-                  <Modal
-                    className='modal'
-                    displayModal={displayModal}
-                    modalInfo={modalInfo}
-                    closeModal={selectModal}
-                  />
-                </td>
-              </tr>
-            ))}
+                  <td>
+                    {user.name.first} {user.name.last}
+                  </td>
+                  <td>{user.dob.age} </td>
+                  <td> {user.email}</td>
+                  <td> {user.phone}</td>
+                  <td>
+                    {!displayModal && (
+                      <button
+                        onClick={() => selectModal(user)}
+                        className='btn btn-outline-info'>
+                        more...
+                      </button>
+                    )}
+                    <Modal
+                      // className='modal'
+                      displayModal={displayModal}
+                      modalInfo={modalInfo}
+                      closeModal={selectModal}
+                    />
+                  </td>
+                </tr>
+              ))}
+        </table>
       </div>
-      <nav>
+      <nav className='pagination-row'>
         {pageNumber.map((page, index) => (
           <button
             key={index}
@@ -167,7 +170,11 @@ const Pagination = ({ userArray, loading }) => {
           </button>
         ))}{" "}
         <span>
-          <select onClick={pageSize} onChange={() => {}}>
+          <select
+            onClick={pageSize}
+            onChange={() => {
+              setCurrentPageNumber(1);
+            }}>
             <option value={5}>5</option>
             <option value={10}>10</option>
             <option value={15}>15</option>
