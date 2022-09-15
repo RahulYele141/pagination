@@ -43,5 +43,6 @@ img {
 }
 .pagination-row {
   margin: 20px 0;
+  align-items: stretch;
   justify-content: space-between;
 }

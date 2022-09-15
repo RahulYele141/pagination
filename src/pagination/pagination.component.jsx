@@ -8,7 +8,6 @@ const Pagination = ({ userArray, loading }) => {
   const [recordsPerPage, setRecordsPerPage] = useState(5);
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
   const [currentRecords, setCurrentRecords] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
   const [searchField, setSearchField] = useState("");
   const [displayModal, setDisplayModal] = useState(false);
   const [modalInfo, setModalInfo] = useState({
@@ -45,31 +44,10 @@ const Pagination = ({ userArray, loading }) => {
     setRecordsPerPage(Number(event.target.value));
   };
 
-  const newCurrentRecords = userArray.filter((user) => {
-    return (
-      user.name.first.toLocaleLowerCase().includes(searchField) ||
-      user.name.last.toLocaleLowerCase().includes(searchField)
-    );
-  });
-
   const onChangeHandler = (event) => {
     setSearchField(
       event.target.value.toLocaleLowerCase().replace(/\s+/g, " ").trim()
     );
-    setSearchResults(newCurrentRecords);
-    setCurrentPageNumber(1);
-
-    if (
-      searchField !== currentRecords.name.first ||
-      searchField !== currentRecords.name.last
-    ) {
-      return <div>No results</div>;
-    }
-
-    if (event.target.value === "") {
-      setSearchResults([]);
-      setSearchField("");
-    }
   };
 
   const selectModal = (user) => {
@@ -98,61 +76,41 @@ const Pagination = ({ userArray, loading }) => {
             <td>Phone</td>
           </tr>
 
-          {searchResults.length === 0 || searchField === ""
-            ? currentRecords.map((user, index) => (
-                <tr key={index}>
-                  <td>
-                    <img src={user.picture.thumbnail} alt='Profile' />
-                  </td>
-                  <td>
-                    {user.name.first} {user.name.last}
-                  </td>
-                  <td>{user.dob.age} </td>
-                  <td> {user.email}</td>
-                  <td> {user.phone}</td>
-                  <td>
-                    {!displayModal && (
-                      <button
-                        onClick={() => selectModal(user)}
-                        className='btn btn-outline-info'>
-                        more...
-                      </button>
-                    )}
-                    <Modal
-                      className='modal'
-                      displayModal={displayModal}
-                      modalInfo={modalInfo}
-                      closeModal={selectModal}
-                    />
-                  </td>
-                </tr>
-              ))
-            : searchResults.map((user, index) => (
-                <tr key={index}>
+          {currentRecords
+            .filter((user) => {
+              return (
+                user.name.first.toLocaleLowerCase().includes(searchField) ||
+                user.name.last.toLocaleLowerCase().includes(searchField)
+              );
+            })
+            .map((user, index) => (
+              <tr key={index}>
+                <td>
                   <img src={user.picture.thumbnail} alt='Profile' />
-                  <td>
-                    {user.name.first} {user.name.last}
-                  </td>
-                  <td>{user.dob.age} </td>
-                  <td> {user.email}</td>
-                  <td> {user.phone}</td>
-                  <td>
-                    {!displayModal && (
-                      <button
-                        onClick={() => selectModal(user)}
-                        className='btn btn-outline-info'>
-                        more...
-                      </button>
-                    )}
-                    <Modal
-                      // className='modal'
-                      displayModal={displayModal}
-                      modalInfo={modalInfo}
-                      closeModal={selectModal}
-                    />
-                  </td>
-                </tr>
-              ))}
+                </td>
+                <td>
+                  {user.name.first} {user.name.last}
+                </td>
+                <td>{user.dob.age} </td>
+                <td> {user.email}</td>
+                <td> {user.phone}</td>
+                <td>
+                  {!displayModal && (
+                    <button
+                      onClick={() => selectModal(user)}
+                      className='btn btn-outline-info'>
+                      more...
+                    </button>
+                  )}
+                  <Modal
+                    className='modal'
+                    displayModal={displayModal}
+                    modalInfo={modalInfo}
+                    closeModal={selectModal}
+                  />
+                </td>
+              </tr>
+            ))}
         </table>
       </div>
       <nav className='pagination-row'>
