@@ -42,7 +42,6 @@ const Modal = ({ displayModal, closeModal, modalInfo }) => {
               }
             </div>
           }
-          <div className='modal-flex'></div>
         </div>
       </div>
     </div>

@@ -17,9 +17,11 @@
 }
 
 .table-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin: auto;
-  width: 60%;
-  padding: 20px;
+  width: 80%;
   font-weight: bold;
 }
 
