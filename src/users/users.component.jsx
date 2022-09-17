@@ -14,6 +14,7 @@ const Users = () => {
         return response.json();
       })
       .then((response) => {
+        response.results.map((user) => (user.selected = false));
         setUserArray(response.results);
         setLoading(false);
       })

@@ -44,7 +44,6 @@ const Pagination = ({ userArray, loading }) => {
       (currentPageNumber - 1) * recordsPerPage + (recordsPerPage - 1);
     const newRecords = userArray.slice(firstRecord, lastRecord + 1);
     setCurrentRecords(newRecords);
-    console.log(newRecords);
   }, [userArray, currentPageNumber, recordsPerPage]);
 
   const pageSize = (event) => {
@@ -64,25 +63,20 @@ const Pagination = ({ userArray, loading }) => {
 
   const openAcc = (index) => {
     const abc = currentRecords.map((user, ind) => {
-      console.log("state:", user.selected, user.name.first);
       if (ind === index) {
-        user.selected = true;
-        setSelected(true);
+        user.selected = !selected;
+        setSelected(!selected);
+        console.log(`if: ${user.selected}, index: ${index}`);
         return user;
       } else {
-        user.selected = false;
-        setSelected(false);
+        // user.selected = !selected;
+        setSelected(!selected);
+        console.log(`else: ${user.selected}, index: ${index}`);
         return user;
       }
     });
+    console.log("--------------------");
     setCurrentRecords(abc);
-  };
-
-  const closeAcc = (user, index) => {
-    console.log("state:", user.selected, user.name.first);
-    if ((user.selected = true)) user.selected = false;
-
-    return user;
   };
 
   if (loading) return <div className='center'>Loading...</div>;
@@ -116,7 +110,9 @@ const Pagination = ({ userArray, loading }) => {
               <div className='accordion-item'>
                 <h4 className='accordion-header' id='headingOne'>
                   <div
-                    onClick={() => openAcc(index)}
+                    onClick={() => {
+                      openAcc(index);
+                    }}
                     style={{ padding: 0 }}
                     type='button'
                     data-bs-toggle='collapse'
@@ -136,7 +132,10 @@ const Pagination = ({ userArray, loading }) => {
                       <td>
                         {!displayModal && (
                           <button
-                            onClick={() => selectModal(user)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              selectModal(user);
+                            }}
                             className='btn btn-outline-info'>
                             more...
                           </button>
@@ -158,9 +157,7 @@ const Pagination = ({ userArray, loading }) => {
                   }`}
                   aria-labelledby='headingOne'
                   data-bs-parent='#accordionExample'>
-                  <div
-                    className='accordion-body'
-                    onClick={() => closeAcc(user, index)}>
+                  <div className='accordion-body'>
                     <div
                       style={{
                         display: "flex",
