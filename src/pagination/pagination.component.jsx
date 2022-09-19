@@ -71,11 +71,8 @@ const Pagination = ({ userArray, loading }) => {
       setSearchField(
         event.target.value.toLocaleLowerCase().replace(/\s+/g, " ").trim()
       );
-
       setSearchRecords(newCurrentRecords);
       setCurrentPageNumber(1);
-      console.log(searchField);
-
       if (event.target.value === "") {
         setSearchRecords([]);
         setSearchField("");
@@ -83,6 +80,10 @@ const Pagination = ({ userArray, loading }) => {
     };
     return [onChangeHandler, searchField, searchRecords];
   };
+
+  const [onChangeHandler, searchField, searchRecords] = useSearch();
+  console.log(searchField);
+  console.log(searchRecords);
 
   // console.log(searchField);
 
@@ -177,8 +178,6 @@ const Pagination = ({ userArray, loading }) => {
   const toggleOrder = () => {
     tog ? ascendingOrder() : descendingOrder();
   };
-
-  const [onChangeHandler, searchField, searchRecords] = useSearch();
 
   if (loading) return <div className='center'>Loading...</div>;
 
