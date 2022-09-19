@@ -9,13 +9,16 @@ const Users = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`https://randomuser.me/api?results=27`)
+    fetch(`https://randomuser.me/api?results=18`)
       .then((response) => {
         return response.json();
       })
       .then((response) => {
+        response.results.map((user, ind = 0) => (user.uid = Number(ind + 1)));
         response.results.map((user) => (user.selected = false));
+
         setUserArray(response.results);
+        console.log(response.results);
         setLoading(false);
       })
       .catch((e) => {

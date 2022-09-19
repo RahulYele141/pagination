@@ -10,7 +10,7 @@ const Pagination = ({ userArray, loading }) => {
   const [currentRecords, setCurrentRecords] = useState([]);
   const [searchField, setSearchField] = useState("");
   const [displayModal, setDisplayModal] = useState(false);
-  const [selected, setSelected] = useState(false);
+  let [selected, setSelected] = useState(false);
   const [modalInfo, setModalInfo] = useState({
     name: { first: "first", last: "last" },
     title: "title",
@@ -61,21 +61,39 @@ const Pagination = ({ userArray, loading }) => {
     user && setModalInfo(user);
   };
 
-  const openAcc = (index) => {
-    const abc = currentRecords.map((user, ind) => {
-      if (ind === index) {
-        user.selected = !selected;
+  const openAccordion = (index) => {
+    const abc = currentRecords.map((user) => {
+      if (user.uid - 1 === index) {
+        user.selected = true;
         setSelected(!selected);
-        console.log(`if: ${user.selected}, index: ${index}`);
+        // console.log(`  if: ${user.uid}, index: ${index} ,${user.selected}`);
+        // console.log(user);
         return user;
       } else {
-        // user.selected = !selected;
+        user.selected = false;
         setSelected(!selected);
-        console.log(`else: ${user.selected}, index: ${index}`);
+        // console.log(`else: ${user.uid}, index: ${index},${user.selected}`);
         return user;
       }
     });
-    console.log("--------------------");
+
+    setCurrentRecords(abc);
+  };
+
+  const closeAccordion = (index) => {
+    console.log("clicked");
+    const abc = currentRecords.map((user) => {
+      if (user.uid - 1 === index) {
+        user.selected = false;
+        setSelected(!selected);
+        console.log(`  if: ${user.uid}, index: ${index} ,${user.selected}`);
+        // console.log(user);
+        return user;
+      } else {
+        setSelected(!selected);
+        return user;
+      }
+    });
     setCurrentRecords(abc);
   };
 
@@ -91,12 +109,12 @@ const Pagination = ({ userArray, loading }) => {
         onChange={(event) => onChangeHandler(event)}
       />
       <div>
-        <tr className='table-row'>
-          <td> </td>
-          <td>Name</td>
-          <td>Age</td>
-          <td>Email</td>
-          <td>Phone</td>
+        <tr className='table-row_head'>
+          <td className='table-row_data'>Name</td>
+          <td className='table-row_data'>Age</td>
+          <td className='table-row_data'>Email</td>
+          <td className='table-row_data'>Phone</td>
+          <td className='table-row_data'> </td>
         </tr>
         {currentRecords
           .filter((user) => {
@@ -106,12 +124,12 @@ const Pagination = ({ userArray, loading }) => {
             );
           })
           .map((user, index) => (
-            <div className='accordion' id='accordionExample'>
+            <div className='accordion div-row' id='accordionExample'>
               <div className='accordion-item'>
                 <h4 className='accordion-header' id='headingOne'>
                   <div
                     onClick={() => {
-                      openAcc(index);
+                      openAccordion(index);
                     }}
                     style={{ padding: 0 }}
                     type='button'
@@ -132,6 +150,7 @@ const Pagination = ({ userArray, loading }) => {
                       <td>
                         {!displayModal && (
                           <button
+                            style={{ margin: 20 }}
                             onClick={(e) => {
                               e.stopPropagation();
                               selectModal(user);
@@ -151,17 +170,19 @@ const Pagination = ({ userArray, loading }) => {
                   </div>
                 </h4>
                 <div
+                  onClick={() => closeAccordion(index)}
                   id='collapseOne'
                   className={`accordion-collapse collapse ${
                     user.selected === true ? "show" : ""
                   }`}
                   aria-labelledby='headingOne'
                   data-bs-parent='#accordionExample'>
-                  <div className='accordion-body'>
+                  <div className='accordion-body table-row'>
                     <div
                       style={{
                         display: "flex",
-                        justifyContent: "space-between",
+                        justifyContent: "space-evenly",
+                        backgroundColor: "#f2ead5",
                       }}>
                       <img src={user.picture.medium} alt='Profile' />
                       <h5>
